@@ -2,38 +2,51 @@
 
     <x-slot:title>{{ $title }}</x-slot>
 
-    <a class="btn btn-primary mb-3" href="{{ route('student.create') }}" 
-    role="button">create student</a>
+    @if (session('success'))
+        <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <a class="btn btn-primary mb-3" href="{{ route('student.create') }}" role="button">create student</a>
 
 
 
     <table class="table table-bordered border-dark table-hover">
-  <thead>
+        <thead>
+
+            <tr>
+
+                <th scope="col">#</th>
+                <th scope="col">Nama</th>
+                <th scope="col">Nim</th>
+                <th scope="col">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($students as $student)
+                <tr>
+                    <th scope="row">{{ $loop->iteration }}</th>
+                    <td>{{ $student->name }}</td>
+                    <td>{{ $student->nim }}</td>
+
+                    <td>
+                        <a class="btn btn-warning " href="{{ route('student.edit', $student) }}" role="button"> Edit
+                        </a>
+  <form method="POST" action="{{ route('student.destroy', $student) }}" class="d-inline">
     
-    <tr>
+       @csrf
+@method('delete')
+<button type="submit" class="btn btn-danger" onclick="return confirm('are you sure?')">delete</button>
 
-      <th scope="col">#</th>
-      <th scope="col">Nama</th>
-      <th scope="col">Nim</th>
-      <th scope="col">Aksi</th>
-    </tr>
-  </thead>
-  <tbody>
-@foreach ($students as $student )
-    
+  </form>
 
-<tr>
-    <th scope="row">{{ $loop->iteration  }}</th>
-    <td>{{ $student->name }}</td>
-    <td>{{ $student->nim}}</td>
-    <td></td>
-</tr>
-
-@endforeach
+                    </td>
+                </tr>
+            @endforeach
 
 
-  </tbody>
-</table>
+        </tbody>
+    </table>
 
 </x-app>
-

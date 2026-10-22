@@ -37,20 +37,21 @@ class StudentController extends Controller
     {
        $validated = $request->validate([
         'name' => 'required', 
-        'nim' => 'required|numeric|digits:12',
+        'nim' => 'required|numeric|digits:11',
     ],
     [
         'name.required' =>'nama wajib di input',
         'nim.required' =>'nim wajib di input',
         'nim.numeric' =>'nim wajib berupa angka',
-        'nim.digits' =>'nim wajib 12 digit',
+        'nim.digits' =>'nim wajib 11 digit',
 
     ]
     );
  
       student::create($validated);
+      return to_route('student.index')->withSuccess('data berhasil ditambahkan');
  
-    return redirect('/student');
+    
     }
 
     /**
@@ -64,24 +65,44 @@ class StudentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Student $student)
     {
-        //
+        return view('student.edit', [
+            'title' => 'Edit Student',
+            'student' => $student
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Student $student)
     {
-        //
+         $validated = $request->validate([
+        'name' => 'required', 
+        'nim' => 'required|numeric|digits:11',
+    ],
+    [
+        'name.required' =>'nama wajib di input',
+        'nim.required' =>'nim wajib di input',
+        'nim.numeric' =>'nim wajib berupa angka',
+        'nim.digits' =>'nim wajib 11 digit',
+
+    ]
+    );
+ $student->update($validated);
+     
+      return to_route('student.index')->withSuccess('data berhasil diubah');
+ 
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Student $student)
     {
-        //
+         $student->delete();
+     
+      return to_route('student.index')->withSuccess('data berhasil dihapus');
     }
 }
