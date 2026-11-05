@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use App\Models\Lecturer;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class LecturerController extends Controller
      */
     public function index()
     {
-          return view('lecturer.index', [
+        return view('lecturer.index', [
             'title' => 'lecturer',
             'lecturers' => lecturer::latest()->get(),
         ]);
@@ -23,7 +24,10 @@ class LecturerController extends Controller
      */
     public function create()
     {
-        //
+        return view('lecturer.create', [
+            'title' => 'Create Lecturer',
+            'departments' => Department::latest()->get(),
+        ]);
     }
 
     /**
@@ -31,7 +35,21 @@ class LecturerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate(
+            [
+                'name' => 'required',
+                'department_id' => 'required',
+            ],
+            [
+                'name.required' => 'nama wajib di input',
+                'department_id.required' => 'program studi wajib di pilih',
+
+
+            ]
+        );
+
+        Lecturer::create($validated);
+        return to_route('lecturer.index')->withSuccess('data berhasil ditambahkan');
     }
 
     /**
@@ -47,7 +65,11 @@ class LecturerController extends Controller
      */
     public function edit(Lecturer $lecturer)
     {
-        //
+        return view('lecturer.edit', [
+            'title' => 'Edit Lecturer',
+            'departments' => Department::latest()->get(),
+            'lecturer' => $lecturer,
+        ]);
     }
 
     /**
@@ -55,7 +77,21 @@ class LecturerController extends Controller
      */
     public function update(Request $request, Lecturer $lecturer)
     {
-        //
+         $validated = $request->validate(
+            [
+                'name' => 'required',
+                'department_id' => 'required',
+            ],
+            [
+                'name.required' => 'nama wajib di input',
+                'department_id.required' => 'program studi wajib di pilih',
+
+
+            ]
+        );
+
+        $lecturer->update($validated);
+        return to_route('lecturer.index')->withSuccess('data berhasil diubah');
     }
 
     /**

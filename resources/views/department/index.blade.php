@@ -27,18 +27,26 @@
                 <tr>
                     <th scope="row">{{ $loop->iteration }}</th>
                     <td>{{ $department->name }}</td>
-                    
+
 
                     <td>
-                        <a class="btn btn-warning " href="{{ route('department.edit', $department) }}" role="button"> Edit
+                        <a class="btn btn-info "
+                            href="{{ route('department.show', $department) }}" role="button">
+                            Detail
                         </a>
-  <form method="POST" action="{{ route('department.destroy', $department) }}" class="d-inline">
-    
-       @csrf
-@method('delete')
-<button type="submit" class="btn btn-danger" onclick="return confirm('are you sure?')">delete</button>
 
-  </form>
+                        <a class="btn btn-warning "
+                            href="{{ route('department.edit', $department) }}" role="button">
+                            Edit
+                        </a>
+                        <form method="POST" action="{{ route('department.destroy', $department) }}" class="d-inline">
+
+                            @csrf
+                            @method('delete')
+                            <button type="submit" class="btn btn-danger"
+                                onclick="return confirm('are you sure?')">delete</button>
+
+                        </form>
 
                     </td>
                 </tr>
