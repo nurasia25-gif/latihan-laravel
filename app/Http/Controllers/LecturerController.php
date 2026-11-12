@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Department;
 use App\Models\Lecturer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class LecturerController extends Controller
 {
@@ -39,14 +40,20 @@ class LecturerController extends Controller
             [
                 'name' => 'required',
                 'department_id' => 'required',
+                'avatar' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:1024'
             ],
             [
                 'name.required' => 'nama wajib di input',
                 'department_id.required' => 'program studi wajib di pilih',
-
-
+                'avatar.image' => 'avatar harus berupa gambar',
+                'avatar.mimes' => 'format avatar adalah png, jpg, jpeg, webp',
+                'avatar.max' => 'ukuran avatar maksimum 1mb',
             ]
         );
+
+        if ($request->hasFile('avatar')) {
+            $validated['avatar'] = $request->file('avatar')->store('lecturers', 'public');
+        }
 
         Lecturer::create($validated);
         return to_route('lecturer.index')->withSuccess('data berhasil ditambahkan');
@@ -77,18 +84,28 @@ class LecturerController extends Controller
      */
     public function update(Request $request, Lecturer $lecturer)
     {
-         $validated = $request->validate(
+        $validated = $request->validate(
             [
                 'name' => 'required',
                 'department_id' => 'required',
+                'avatar' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:1024'
             ],
             [
                 'name.required' => 'nama wajib di input',
                 'department_id.required' => 'program studi wajib di pilih',
-
-
+                'avatar.image' => 'avatar harus berupa gambar',
+                'avatar.mimes' => 'format avatar adalah png, jpg, jpeg, webp',
+                'avatar.max' => 'ukuran avatar maksimum 1mb',
             ]
         );
+
+        if ($request->hasFile('avatar')) {
+
+        if($lecturer->avatar) {
+            Storage::disk('public')->delete($lecturer->avatar);
+        }
+            $validated['avatar'] = $request->file('avatar')->store('lecturers', 'public');
+        }
 
         $lecturer->update($validated);
         return to_route('lecturer.index')->withSuccess('data berhasil diubah');

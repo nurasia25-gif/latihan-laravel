@@ -12,7 +12,7 @@
 
 
 
-    <table class="table table-bordered border-dark table-hover">
+    <table id="example" class="table table-bordered border-dark table-hover">
         <thead>
 
             <tr>
